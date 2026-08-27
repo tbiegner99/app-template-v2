@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: __SLUG__-postgres
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-__SLUG___local}
+      POSTGRES_USER: ${DB_USER:-__SLUG__}
+      POSTGRES_PASSWORD: ${DB_PASS:-__SLUG___local_pass}
+    volumes:
+      - __SLUG__-postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-__SLUG__} -d ${DB_NAME:-__SLUG___local}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - __SLUG__-local
+
+networks:
+  __SLUG__-local:
+    external: true
+
+volumes:
+  __SLUG__-postgres-data:
+    name: __SLUG__-postgres-data

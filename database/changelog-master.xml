@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <!--
+        Master changelog. Add migration files in order below using <include> tags.
+        Migration files live in database/migrations/ and follow the naming convention:
+            YYYYMMDD_NNN_description.sql
+        Example:
+            <include file="migrations/20260423_001_initial_schema.sql"/>
+    -->
+
+    <include file="migrations/20260424_001_create_device_tokens.sql"/>
+    <include file="migrations/20260424_002_create_notification_logs.sql"/>
+    <include file="migrations/20260424_003_create_users.sql"/>
+    <include file="migrations/20260425_001_add_is_disabled_to_users.sql"/>
+
+</databaseChangeLog>

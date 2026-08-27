@@ -1,0 +1,51 @@
+{
+  "name": "@__SLUG__/web",
+  "version": "1.0.0",
+  "description": "__DISPLAY_NAME__ Web Application",
+  "main": "index.js",
+  "scripts": {
+    "dev": "rspack serve",
+    "build": "rspack build",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@__SLUG__/components": "file:../components",
+    "@mui/x-data-grid": "^9.0.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.11.0",
+    "supertokens-auth-react": "^0.51.1",
+    "supertokens-web-js": "^0.16.0"
+  },
+  "devDependencies": {
+    "@mui/material": "^7.3.6",
+    "@rspack/cli": "^1.7.0",
+    "@rspack/core": "^1.7.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "@vitest/coverage-v8": "^4.1.5",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "jsdom": "^29.0.2",
+    "prettier": "^3.2.4",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.3.3",
+    "vitest": "^4.1.5"
+  }
+}

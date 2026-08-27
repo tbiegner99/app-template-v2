@@ -1,0 +1,66 @@
+name: __SLUG__
+description: "__DISPLAY_NAME__"
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  signature: ^6.3.0
+  speech_to_text: ^7.3.0
+  image_picker: ^1.2.1
+  image_painter: ^0.7.1
+  intl: ^0.20.2
+  dropdown_search: ^6.0.2
+  ffi: ^2.1.0
+  sqflite: ^2.3.3
+  path: ^1.9.0
+  get_it: ^7.7.0
+  firebase_core: ^4.7.0
+  firebase_messaging: ^16.2.0
+  flutter_local_notifications: ^18.0.1
+  package_info_plus: ^8.0.0
+  uuid: ^4.5.1
+  logger: ^2.7.0
+  path_provider: ^2.1.5
+  go_router: ^14.0.0
+  posthog_flutter: ^5.23.3
+  http: ^1.4.0
+  shared_preferences: ^2.5.3
+  connectivity_plus: ^6.1.1
+  # __BEGIN_OPTIONAL_BLE_ALERTS__
+  # flutter_blue_plus: ^2.3.3
+  # bluetooth_low_energy: ^6.2.1
+  # __END_OPTIONAL_BLE_ALERTS__
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^6.0.0
+  sqflite_common_ffi: ^2.3.4
+  appium_flutter_server: ^0.0.33
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/i18n/

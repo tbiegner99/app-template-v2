@@ -1,0 +1,10 @@
+{
+  "dictionary": {
+    "bottomNav.profileMenu.title": "Profile US",
+    "settings.language.es_MX": "Español (MX)"
+  },
+  "alerts.panel_title": "Alertas",
+  "alerts.dismiss_all": "Descartar todo",
+  "alerts.empty_state": "Sin alertas activas",
+  "alerts.permission_denied_message": "Las notificaciones están desactivadas. Actívalas en Configuración para recibir alertas de seguridad."
+}

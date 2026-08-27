@@ -1,0 +1,22 @@
+meta {
+  name: List Users
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/auth/users/list
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "page": 1,
+    "pageSize": 20
+  }
+}
+
+docs {
+  Requires an active session cookie — run "Sign In" first in the same run.
+}

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: __SLUG__-backend
+    ports:
+      - "8080:8080"
+      - "2345:2345"
+    volumes:
+      - ./src:/app/src
+      - ./go.mod:/app/go.mod
+      - ./go.sum:/app/go.sum
+      - ./__SLUG__-firebase.json:/srv/secrets/firebase_credentials.json:ro
+    environment:
+      - PORT=8080
+      - DB_HOST=postgres
+      - SUPERTOKENS_CONNECTION_URI=${SUPERTOKENS_CONNECTION_URI}
+      - SUPERTOKENS_API_KEY=${SUPERTOKENS_API_KEY}
+      - API_DOMAIN=${API_DOMAIN:-http://localhost}
+      - WEBSITE_DOMAIN=${WEBSITE_DOMAIN:-http://localhost}
+      - GOOGLE_APPLICATION_CREDENTIALS=/srv/secrets/firebase_credentials.json
+      - LOG_LEVEL=debug
+      - FIREBASE_PROJECT_ID=__SLUG__-fec17
+      - SYSTEM_ACTOR_KEY=${SYSTEM_ACTOR_KEY:-}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/__SLUG__/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - __SLUG__-local
+    command: ["air", "-c", ".air.debug.toml"]
+
+networks:
+  __SLUG__-local:
+    external: true

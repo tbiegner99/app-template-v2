@@ -1,0 +1,9 @@
+.editor {
+  & var[data-type='variable'] {
+    background-color: var(--msys-color-variable-bg, #e0f7fa);
+    color: var(--msys-color-variable-text, #006064);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+}

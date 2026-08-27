@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-shared-pdf",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build:debug"],
+      "options": {
+        "cwd": "${workspaceFolder}/shared/pdf"
+      },
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}

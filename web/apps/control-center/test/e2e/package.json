@@ -1,0 +1,19 @@
+{
+  "name": "@__SLUG__/control-center-e2e",
+  "version": "1.0.0",
+  "description": "E2E tests for __DISPLAY_NAME__ Control Center",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen"
+  },
+  "keywords": ["e2e", "playwright", "testing"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.1"
+  }
+}

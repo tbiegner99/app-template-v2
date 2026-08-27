@@ -1,0 +1,6 @@
+{
+  "version": "1",
+  "name": "__DISPLAY_NAME__ API",
+  "type": "collection",
+  "ignore": ["node_modules", ".git"]
+}

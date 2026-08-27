@@ -1,0 +1,27 @@
+meta {
+  name: Update User
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/auth/users/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: replace-with-user-id
+}
+
+body:json {
+  {
+    "email": "test@example.com",
+    "displayName": "Test User",
+    "roles": []
+  }
+}
+
+docs {
+  Requires an active session cookie — run "Sign In" first in the same run.
+}

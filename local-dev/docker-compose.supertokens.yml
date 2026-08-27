@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:11
+    container_name: __SLUG__-supertokens
+    external_links:
+      - __SLUG__-postgres:postgres
+    environment:
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_USER: ${DB_USER:-__SLUG__}
+      POSTGRESQL_PASSWORD: ${DB_PASS:-__SLUG___local_pass}
+      # Separate database from the app's own — reset-db drops/recreates
+      # $DB_NAME only, so this keeps auth/session/user data intact.
+      POSTGRESQL_DATABASE_NAME: ${DB_NAME:-__SLUG___local}_supertokens
+      # API_KEYS: set to a 20+ char string to enforce API key auth (optional for local dev)
+    ports:
+      - "3567:3567"
+    networks:
+      - __SLUG__-local
+    healthcheck:
+      test: ["CMD", "bash", "-c", "curl -sf http://localhost:3567/hello || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+networks:
+  __SLUG__-local:
+    external: true

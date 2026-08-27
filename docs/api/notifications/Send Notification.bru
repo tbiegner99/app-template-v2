@@ -1,0 +1,21 @@
+meta {
+  name: Send Notification
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/notifications/send
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_ids": ["replace-with-user-id"],
+    "type": "alert",
+    "title": "Hello",
+    "body": "This is a test notification",
+    "data": {}
+  }
+}

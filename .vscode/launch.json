@@ -1,0 +1,93 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Backend (npm: debug)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "debug"],
+      //   "preLaunchTask": "build-shared-pdf",
+      "outFiles": [
+        "${workspaceFolder}/shared/pdf/dist/**/*.js",
+        "${workspaceFolder}/backend/dist/**/*.js"
+      ],
+      "port": 9229,
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/backend",
+      "env": {
+        "NODE_ENV": "development",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Launch Backend (ts-node)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/src/index.ts",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "preLaunchTask": "build-shared-pdf",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/backend",
+      "env": {
+        "NODE_ENV": "development",
+        "TS_NODE_PROJECT": "${workspaceFolder}/backend/tsconfig.json",
+        "TS_NODE_COMPILER_OPTIONS": "{\"sourceMap\":true,\"inlineSourceMap\":false}"
+      },
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/backend/**/*.js",
+        "${workspaceFolder}/shared/pdf/dist/**/*.js"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Debug Backend (Simple)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/backend/node_modules/.bin/ts-node-dev",
+      "runtimeArgs": ["--inspect", "--transpile-only", "--no-notify"],
+      "args": ["${workspaceFolder}/backend/src/index.ts"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/backend",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach to Backend (9229)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "address": "localhost",
+      "restart": true,
+      "localRoot": "${workspaceFolder}/backend",
+      "remoteRoot": null,
+      "env": {
+        "NODE_OPTIONS": "--enable-source-maps"
+      }
+    },
+    {
+      "name": "Connect to Go Backend (Docker)",
+      "type": "go",
+      "request": "attach",
+      "mode": "remote",
+      "port": 2345,
+      "host": "localhost",
+      "showLog": true,
+      "substitutePath": [
+        {
+          "from": "${workspaceFolder}/backend/__SLUG__",
+          "to": "/app"
+        }
+      ]
+    }
+  ]
+}

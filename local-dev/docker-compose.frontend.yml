@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    container_name: __SLUG__-ui
+    ports:
+      - "${UI_PORT:-80}:80"
+    volumes:
+      - ./ui/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../web/apps/control-center/dist:/usr/share/nginx/html/control-center:ro
+    restart: unless-stopped
+    networks:
+      - __SLUG__-local
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  __SLUG__-local:
+    external: true

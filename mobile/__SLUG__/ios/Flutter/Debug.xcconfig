@@ -1,0 +1,4 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+#include "Generated.xcconfig"
+OTHER_LDFLAGS[sdk=iphonesimulator*] = $(inherited) -force_load $(SRCROOT)/../rust/target/aarch64-apple-ios-sim/release/libtypst_ffi.a
+OTHER_LDFLAGS[sdk=iphoneos*] = $(inherited) -force_load $(SRCROOT)/../rust/target/aarch64-apple-ios/release/libtypst_ffi.a

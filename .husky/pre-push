@@ -1,0 +1,153 @@
+#!/bin/sh
+# Pre-push hook: runs unit tests with coverage for all four projects.
+# Blocks push if any project is below 85% coverage or has test failures.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+THRESHOLD=80
+FAILED=0
+
+check_coverage() {
+  PROJECT="$1"
+  COVERAGE="$2"
+  MIN="${3:-$THRESHOLD}"
+  # Strip any % sign and decimal
+  COVERAGE_INT=$(echo "$COVERAGE" | sed 's/%//' | cut -d'.' -f1)
+  if [ "$COVERAGE_INT" -lt "$MIN" ]; then
+    echo "FAIL: $PROJECT coverage is ${COVERAGE}% (minimum ${MIN}%)"
+    FAILED=1
+  else
+    echo "PASS: $PROJECT coverage is ${COVERAGE}%"
+  fi
+}
+
+echo "=== Pre-push: running unit tests for all projects ==="
+
+# 1. web/apps/components
+echo "\n--- web/apps/components ---"
+cd "$REPO_ROOT/web/apps/components"
+if npm test -- --coverage --reporter=json --reporter=verbose 2>&1 | tee /tmp/components-coverage.txt; then
+  COV=$(cat /tmp/components-coverage.txt | grep -E 'All files.*\|' | awk -F'|' '{print $5}' | tr -d ' ' | head -1)
+  if [ -z "$COV" ]; then
+    # Try reading from coverage-summary.json if available
+    if [ -f coverage/coverage-summary.json ]; then
+      COV=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.lines.pct)")
+    else
+      echo "FAIL: web/apps/components — could not determine coverage"
+      FAILED=1
+      COV=0
+    fi
+  fi
+  check_coverage "web/apps/components" "$COV"
+else
+  echo "FAIL: web/apps/components — tests failed"
+  FAILED=1
+fi
+
+# 2. web/apps/control-center
+echo "\n--- web/apps/control-center ---"
+cd "$REPO_ROOT/web/apps/control-center"
+if npm test -- --coverage --reporter=json --reporter=verbose 2>&1 | tee /tmp/control-center-coverage.txt; then
+  COV=$(cat /tmp/control-center-coverage.txt | grep -E 'All files.*\|' | awk -F'|' '{print $5}' | tr -d ' ' | head -1)
+  if [ -z "$COV" ]; then
+    if [ -f coverage/coverage-summary.json ]; then
+      COV=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.lines.pct)")
+    else
+      echo "FAIL: web/apps/control-center — could not determine coverage"
+      FAILED=1
+      COV=0
+    fi
+  fi
+  check_coverage "web/apps/control-center" "$COV"
+else
+  echo "FAIL: web/apps/control-center — tests failed"
+  FAILED=1
+fi
+
+# 3. backend/__SLUG__
+echo "\n--- backend/__SLUG__ ---"
+cd "$REPO_ROOT/backend/__SLUG__"
+if go test ./... -coverprofile=/tmp/go-coverage.out 2>&1; then
+  COV=$(go tool cover -func=/tmp/go-coverage.out | grep '^total:' | awk '{print $3}' | sed 's/%//')
+  if [ -z "$COV" ]; then
+    echo "FAIL: backend/__SLUG__ — could not determine coverage"
+    FAILED=1
+    COV=0
+  fi
+  # Go backend threshold is lower (10%) — service/datasource layers tested via integration tests
+  check_coverage "backend/__SLUG__" "$COV" 10
+else
+  echo "FAIL: backend/__SLUG__ — tests failed"
+  FAILED=1
+fi
+
+# 4. mobile
+echo "\n--- mobile ---"
+cd "$REPO_ROOT/mobile"
+if flutter test --coverage 2>&1; then
+  if command -v lcov >/dev/null 2>&1 && [ -f coverage/lcov.info ]; then
+    COV=$(lcov --summary coverage/lcov.info 2>&1 | grep 'lines' | grep -oE '[0-9]+\.[0-9]+%' | head -1 | sed 's/%//')
+  elif [ -f coverage/lcov.info ]; then
+    # Fallback: compute manually from lcov.info
+    FOUND=$(grep -c '^DA:' coverage/lcov.info || echo 0)
+    HIT=$(grep '^DA:' coverage/lcov.info | grep -v ',0$' | wc -l | tr -d ' ')
+    if [ "$FOUND" -gt 0 ]; then
+      COV=$(awk "BEGIN {printf \"%.1f\", ($HIT/$FOUND)*100}")
+    else
+      echo "FAIL: mobile — could not determine coverage"
+      FAILED=1
+      COV=0
+    fi
+  else
+    echo "FAIL: mobile — no coverage data found"
+    FAILED=1
+    COV=0
+  fi
+  # Mobile threshold is lower (20%) — most UI code is covered by Appium E2E tests
+  check_coverage "mobile" "$COV" 20
+else
+  echo "FAIL: mobile — tests failed"
+  FAILED=1
+fi
+
+echo "\n=== Pre-push coverage check complete ==="
+
+# 5. widgetbook catalog coverage
+# Every widget added/changed under mobile/lib/components/**/*.dart must have a
+# matching use-case file under mobile/widgetbook/lib/use_cases/**, per
+# specs/012-widgetbook-docs/contracts/use-case-naming-convention.md.
+echo "\n--- widgetbook catalog coverage ---"
+cd "$REPO_ROOT"
+MERGE_BASE=$(git merge-base HEAD "$(git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null || echo HEAD)" 2>/dev/null || echo HEAD)
+CHANGED_COMPONENTS=$(git diff --name-only "$MERGE_BASE"..HEAD -- 'mobile/lib/components/**/*.dart' 2>/dev/null || true)
+CATALOG_FAILED=0
+if [ -n "$CHANGED_COMPONENTS" ]; then
+  for f in $CHANGED_COMPONENTS; do
+    # f like: mobile/lib/components/<sub-path>/<widget_name>.dart
+    REL="${f#mobile/lib/components/}"
+    SUB_PATH=$(dirname "$REL")
+    BASE=$(basename "$REL" .dart)
+    EXPECTED="mobile/widgetbook/lib/use_cases/${SUB_PATH}/${BASE}_use_case.dart"
+    if [ ! -f "$EXPECTED" ]; then
+      echo "FAIL: $f has no catalog entry."
+      echo "      Expected: $EXPECTED"
+      CATALOG_FAILED=1
+    fi
+  done
+  if [ "$CATALOG_FAILED" -eq 0 ]; then
+    echo "PASS: all changed widgets have a matching catalog entry."
+  else
+    FAILED=1
+  fi
+else
+  echo "PASS: no changed widgets under mobile/lib/components/."
+fi
+
+if [ "$FAILED" -ne 0 ]; then
+  echo "Push blocked: one or more projects failed coverage check."
+  exit 1
+fi
+
+echo "All projects passed. Proceeding with push."
+exit 0

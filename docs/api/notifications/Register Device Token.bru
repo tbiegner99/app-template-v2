@@ -1,0 +1,25 @@
+meta {
+  name: Register Device Token
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/notifications/device-tokens
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "token": "sample-fcm-token",
+    "platform": "ios",
+    "platform_version": "18.0",
+    "app_version": "1.0.0+1",
+    "device_id": "sample-device-id"
+  }
+}
+
+docs {
+  Requires an active session cookie — run "Sign In" (in the auth folder) first in the same run.
+}

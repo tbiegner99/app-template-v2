@@ -1,0 +1,18 @@
+{
+  "name": "__SLUG__-local-dev",
+  "version": "1.0.0",
+  "description": "__DISPLAY_NAME__ local development environment tools",
+  "bin": {
+    "__SLUG__": "./local-dev/scripts/__SLUG__.sh"
+  },
+  "scripts": {
+    "postinstall": "bash local-dev/scripts/install.sh",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}

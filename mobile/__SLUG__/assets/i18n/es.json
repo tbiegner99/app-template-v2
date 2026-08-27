@@ -1,0 +1,29 @@
+{
+  "dictionary": {
+    "bottomNav.homeMenu.title": "Home Spanish",
+    "bottomNav.searchMenu.title": "Search Spanish",
+    "bottomNav.profileMenu.title": "Profile Spanish",
+    "settings.title": "Configuración",
+    "settings.section.account": "Cuenta",
+    "settings.section.notifications": "Notificaciones",
+    "settings.section.app": "Aplicación",
+    "settings.section.about": "Acerca de",
+    "settings.profile": "Perfil",
+    "settings.pushNotifications": "Notificaciones Push",
+    "settings.pushNotifications.subtitle": "Recibir alertas en este dispositivo",
+    "settings.criticalAlerts": "Alertas Críticas",
+    "settings.criticalAlerts.subtitle": "Anular el modo silencioso en emergencias",
+    "settings.language": "Idioma",
+    "settings.syncData": "Sincronizar Datos",
+    "settings.appVersion": "Versión de la App",
+    "settings.logout": "Cerrar Sesión",
+    "settings.language.en": "English",
+    "settings.language.es": "Español",
+    "settings.language.es_MX": "Español (México)",
+    "settings.language.selectTitle": "Seleccionar Idioma"
+  },
+  "alerts.panel_title": "Alertas",
+  "alerts.dismiss_all": "Descartar todo",
+  "alerts.empty_state": "Sin alertas activas",
+  "alerts.permission_denied_message": "Las notificaciones están desactivadas. Actívalas en Configuración para recibir alertas de seguridad."
+}

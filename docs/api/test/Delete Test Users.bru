@@ -1,0 +1,26 @@
+meta {
+  name: Delete Test Users
+  type: http
+  seq: 1
+}
+
+delete {
+  url: {{baseUrl}}/test/users
+  body: json
+  auth: none
+}
+
+headers {
+  X-Test-Api-Key: {{testApiKey}}
+}
+
+body:json {
+  {
+    "ids": ["replace-with-user-id"]
+  }
+}
+
+docs {
+  Test-only endpoint, gated by the TEST_API_KEY env var on the backend.
+  Set the "testApiKey" environment variable to match TEST_API_KEY before running.
+}

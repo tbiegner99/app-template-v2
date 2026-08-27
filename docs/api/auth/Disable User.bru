@@ -1,0 +1,19 @@
+meta {
+  name: Disable User
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{baseUrl}}/auth/users/:id/disable
+  body: none
+  auth: none
+}
+
+params:path {
+  id: replace-with-user-id
+}
+
+docs {
+  Requires an active session cookie — run "Sign In" first in the same run.
+}

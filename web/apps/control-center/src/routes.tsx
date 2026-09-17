@@ -11,12 +11,14 @@ import { H1 } from '@__SLUG__/components';
 
 function AppRoutes() {
   return (
-    <BrowserRouter basename="/control-center">
+    <BrowserRouter basename="/__SLUG__/control-center">
       <Routes>
         {/* SuperTokens pre-built UI routes for /auth/* */}
-        {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [
-          EmailPasswordPreBuiltUI,
-        ])}
+        {getSuperTokensRoutesForReactRouterDom(
+          reactRouterDom,
+          [EmailPasswordPreBuiltUI],
+          '/__SLUG__/control-center'
+        )}
 
         {/* Logout */}
         <Route path="/auth/logout" element={<Logout />} />

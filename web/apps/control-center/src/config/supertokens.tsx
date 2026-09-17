@@ -9,7 +9,7 @@ SuperTokens.init({
     apiDomain: 'http://localhost',
     websiteDomain: 'http://localhost',
     apiBasePath: '/api/__SLUG__/auth/v0',
-    websiteBasePath: '/auth',
+    websiteBasePath: '/__SLUG__/control-center/auth',
   },
   recipeList: [
     EmailPassword.init({

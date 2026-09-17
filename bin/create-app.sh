@@ -83,6 +83,27 @@ if [ -d "$TARGET/backend" ]; then
   if [ "$BACKEND_LANG" = "node" ]; then
     rm -rf "$TARGET/backend/__SLUG__"
     mv "$TARGET/backend/__SLUG___node" "$TARGET/backend/__SLUG__"
+
+    # local-dev's nginx proxy and container-alias shortcuts hardcode the Go
+    # container name (__SLUG__-go-backend); the Node backend's container is
+    # __SLUG__-backend (see backend/__SLUG___node/docker-compose.yml), so
+    # retarget both references and drop the now-nonexistent go-backend alias.
+    NGINX_CONF="$TARGET/local-dev/ui/nginx/default.conf"
+    ALIASES_CONF="$TARGET/local-dev/scripts/container-aliases.conf"
+    if [ -f "$NGINX_CONF" ]; then
+      sed -i.bak \
+        -e 's/__SLUG__-go-backend/__SLUG__-backend/g' \
+        -e 's/# API — proxy to Go backend container/# API — proxy to Node backend container/' \
+        "$NGINX_CONF"
+      rm -f "$NGINX_CONF.bak"
+    fi
+    if [ -f "$ALIASES_CONF" ]; then
+      sed -i.bak \
+        -e 's/__SLUG__-go-backend/__SLUG__-backend/g' \
+        -e '/^go-backend=/d' \
+        "$ALIASES_CONF"
+      rm -f "$ALIASES_CONF.bak"
+    fi
   else
     rm -rf "$TARGET/backend/__SLUG___node"
   fi

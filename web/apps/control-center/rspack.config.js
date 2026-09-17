@@ -11,7 +11,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/__SLUG__/control-center/',
     clean: true,
     library: { type: 'module' },
   },
@@ -79,9 +79,11 @@ module.exports = {
     ],
   },
   devServer: {
-    port: 8000,
+    port: 8001,
     hot: true,
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: '/__SLUG__/control-center/index.html',
+    },
     open: true,
     proxy: [
       {
@@ -91,7 +93,7 @@ module.exports = {
     ],
     setupMiddlewares: (middlewares, devServer) => {
       devServer.app.get('/', (req, res) => {
-        res.redirect(302, '/control-center/');
+        res.redirect(302, '/__SLUG__/control-center/');
       });
       return middlewares;
     },

@@ -36,8 +36,8 @@ export const DashboardOverview: React.FC<{ children: React.ReactNode }> = ({ chi
     >
       <GridItem area="sidebar">
         <SideMenu title={<BrandLogo />}>
-          <MenuItem data-id="nav-dashboard" label={t('dashboard')} icon={<DashboardIcon />} href="/control-center/secure/dashboard" active={pathname === '/secure/dashboard'} />
-          <MenuItem data-id="nav-manage-users" label={t('controlCenter.manageUsers.title')} icon={<PeopleIcon />} href="/control-center/secure/manage-users" active={pathname === '/secure/manage-users' || pathname === '/secure/add-user'} />
+          <MenuItem data-id="nav-dashboard" label={t('dashboard')} icon={<DashboardIcon />} href="/__SLUG__/control-center/secure/dashboard" active={pathname === '/secure/dashboard'} />
+          <MenuItem data-id="nav-manage-users" label={t('controlCenter.manageUsers.title')} icon={<PeopleIcon />} href="/__SLUG__/control-center/secure/manage-users" active={pathname === '/secure/manage-users' || pathname === '/secure/add-user'} />
           <RequireRoles userRoles={roles.data ?? []} requiredRoles={['admin']}>
             <MenuSection title={t('controlCenter.nav.admin')}>
               <MenuItem label={t('controlCenter.nav.systemConfig')} icon={<SettingsIcon />} href="#/settings" />
